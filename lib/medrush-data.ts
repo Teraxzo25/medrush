@@ -1,7 +1,7 @@
 export type Role = "Citizen" | "Dispatch Centre" | "Responder" | "Hospital" | "Administration";
 export type RequestStatus = "Incoming" | "Offered" | "Accepted" | "En route" | "At scene" | "Completed" | "Declined";
 export type PaymentStatus = "Pending" | "Processing" | "Successful" | "Failed" | "Reversed";
-export type Emergency = { id: string; name: string; category: string; location: string; phone: string; status: RequestStatus; ambulance?: string; hospital?: string; created: string; verified: boolean; age?: number };
+export type Emergency = { id: string; name: string; category: string; location: string; phone: string; relativeName?: string; relativePhone?: string; status: RequestStatus; ambulance?: string; hospital?: string; created: string; verified: boolean; age?: number };
 export type FundRequest = { id: string; emergencyId: string; person: string; category: string; amount: number; hospital: string; decision: "Approved" | "Declined" | "Review"; reason: string; grant: number; advance: number; date: string; overdue?: boolean; reference?: string };
 export type Payment = { reference: string; requestId: string; hospital: string; amount: number; status: PaymentStatus; date: string; person: string };
 export const initialEmergencies: Emergency[] = [
