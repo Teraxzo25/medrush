@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Medrush | When every second matters',
-  description: 'Smart ambulance coordination and emergency response platform for Akwa Ibom State, Nigeria.',
+  title: 'Medrush | Emergency response and community care',
+  description: 'Mobile-first ambulance coordination, hospital handover, and community emergency funding for Akwa Ibom State, Nigeria.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -26,11 +26,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#f7f8fa',
 }
 
 export default function RootLayout({
