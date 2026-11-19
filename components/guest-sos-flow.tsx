@@ -58,12 +58,9 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
 
     setLocationState("loading");
     setLocationError("");
-    
-    console.log("[v0] Starting geolocation request with enhanced settings");
-    
+
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        console.log("[v0] Location received:", { latitude: coords.latitude, longitude: coords.longitude, accuracy: coords.accuracy });
         const latitude = `${Math.abs(coords.latitude).toFixed(5)}° ${coords.latitude >= 0 ? "N" : "S"}`;
         const longitude = `${Math.abs(coords.longitude).toFixed(5)}° ${coords.longitude >= 0 ? "E" : "W"}`;
         onChange({ location: `${latitude}, ${longitude}` });
@@ -71,9 +68,8 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
         setLocationState("idle");
       },
       (error) => {
-        console.log("[v0] Geolocation error:", { code: error.code, message: error.message });
         const message = error.code === error.PERMISSION_DENIED
-          ? "Location permission denied. Go to Settings > Apps > Browser > Permissions > Location and enable it, then try again."
+          ? "The browser blocked location for this page. Check this site’s location permission and your device’s Location Services, then reload and try again."
           : error.code === error.POSITION_UNAVAILABLE
             ? "GPS unavailable. Enable Location Services/GPS in your device settings and move to an open area, then try again."
             : error.code === error.TIMEOUT
@@ -82,7 +78,7 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
         setLocationError(message);
         setLocationState("error");
       },
-      { enableHighAccuracy: true, timeout: 60000, maximumAge: 0 },
+      { enableHighAccuracy: false, timeout: 30000, maximumAge: 30000 },
     );
   };
 
