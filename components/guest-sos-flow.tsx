@@ -47,14 +47,17 @@ const steps = ["Welcome", "What happened?", "Your details"];
 export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocationDetected }: GuestSOSFlowProps) {
   const [step, setStep] = useState(0);
   const [locationState, setLocationState] = useState<"idle" | "loading" | "error">("idle");
+  const [locationError, setLocationError] = useState("");
 
   const useCurrentLocation = () => {
     if (!navigator.geolocation) {
+      setLocationError("Your browser can’t access device location here. Open this page over HTTPS, or enter a nearby landmark.");
       setLocationState("error");
       return;
     }
 
     setLocationState("loading");
+    setLocationError("");
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const latitude = `${Math.abs(coords.latitude).toFixed(5)}° ${coords.latitude >= 0 ? "N" : "S"}`;
@@ -63,7 +66,15 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
         onLocationDetected(coords.latitude, coords.longitude);
         setLocationState("idle");
       },
-      () => setLocationState("error"),
+      (error) => {
+        const message = error.code === error.PERMISSION_DENIED
+          ? "Location permission is blocked. Allow location access for this site in your browser settings, then tap “Use my current location” again."
+          : error.code === error.POSITION_UNAVAILABLE
+            ? "Your device couldn’t determine its location. Turn on Location Services/GPS and try again, or enter a nearby landmark."
+            : "Finding your location took too long. Check that Location Services/GPS is on and try again, or enter a nearby landmark.";
+        setLocationError(message);
+        setLocationState("error");
+      },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 },
     );
   };
@@ -152,7 +163,7 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
                 <div className="guest-fields">
                   <label className="guest-field">Your name<input autoComplete="name" required value={form.name} onChange={(event) => onChange({ name: event.target.value })} placeholder="Full name" /></label>
                   <label className="guest-field">Phone number<input autoComplete="tel" inputMode="tel" type="tel" required value={form.phone} onChange={(event) => onChange({ phone: event.target.value, verified: false })} placeholder="e.g. 0803 123 4567" /></label>
-                  <label className="guest-field guest-location-field">Pickup location<input autoComplete="street-address" required value={form.location} onChange={(event) => { onChange({ location: event.target.value }); setLocationState("idle"); }} placeholder="Road, landmark, or building" /></label>
+                  <label className="guest-field guest-location-field">Pickup location<input autoComplete="street-address" required value={form.location} onChange={(event) => { onChange({ location: event.target.value }); setLocationState("idle"); setLocationError(""); }} placeholder="Road, landmark, or building" /></label>
                 </div>
                 <div className="guest-location-row">
                   <button className="guest-location-button" type="button" onClick={useCurrentLocation} disabled={locationState === "loading"}>
@@ -160,7 +171,7 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
                   </button>
                   <span>Or enter a nearby landmark</span>
                 </div>
-                {locationState === "error" && <p className="guest-location-error" role="alert">Location access is unavailable. Enter a nearby road, building or landmark instead.</p>}
+                {locationState === "error" && <p className="guest-location-error" role="alert">{locationError}</p>}
                 {form.location && locationState !== "error" && <p className="guest-location-success" aria-live="polite"><MapPin size={14} /> Location added to your request.</p>}
 
                 <div className="guest-submit-area">
