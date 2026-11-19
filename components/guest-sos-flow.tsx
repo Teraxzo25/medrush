@@ -32,6 +32,7 @@ type GuestSOSFlowProps = {
   onChange: (updates: Partial<GuestEmergencyForm>) => void;
   onSubmit: FormEventHandler<HTMLFormElement>;
   onStaffAccess: () => void;
+  onLocationDetected: (latitude: number, longitude: number) => void;
 };
 
 const emergencyTypes = [
@@ -43,7 +44,7 @@ const emergencyTypes = [
 
 const steps = ["Welcome", "What happened?", "Your details"];
 
-export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess }: GuestSOSFlowProps) {
+export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocationDetected }: GuestSOSFlowProps) {
   const [step, setStep] = useState(0);
   const [locationState, setLocationState] = useState<"idle" | "loading" | "error">("idle");
 
@@ -59,10 +60,11 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess }: GuestS
         const latitude = `${Math.abs(coords.latitude).toFixed(5)}° ${coords.latitude >= 0 ? "N" : "S"}`;
         const longitude = `${Math.abs(coords.longitude).toFixed(5)}° ${coords.longitude >= 0 ? "E" : "W"}`;
         onChange({ location: `${latitude}, ${longitude}` });
+        onLocationDetected(coords.latitude, coords.longitude);
         setLocationState("idle");
       },
       () => setLocationState("error"),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 },
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 },
     );
   };
 
