@@ -51,15 +51,19 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
 
   const useCurrentLocation = () => {
     if (!navigator.geolocation) {
-      setLocationError("Your browser can’t access device location here. Open this page over HTTPS, or enter a nearby landmark.");
+      setLocationError("Your browser can't access device location here. Open this page over HTTPS, or enter a nearby landmark.");
       setLocationState("error");
       return;
     }
 
     setLocationState("loading");
     setLocationError("");
+    
+    console.log("[v0] Starting geolocation request with enhanced settings");
+    
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
+        console.log("[v0] Location received:", { latitude: coords.latitude, longitude: coords.longitude, accuracy: coords.accuracy });
         const latitude = `${Math.abs(coords.latitude).toFixed(5)}° ${coords.latitude >= 0 ? "N" : "S"}`;
         const longitude = `${Math.abs(coords.longitude).toFixed(5)}° ${coords.longitude >= 0 ? "E" : "W"}`;
         onChange({ location: `${latitude}, ${longitude}` });
@@ -67,15 +71,18 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess, onLocati
         setLocationState("idle");
       },
       (error) => {
+        console.log("[v0] Geolocation error:", { code: error.code, message: error.message });
         const message = error.code === error.PERMISSION_DENIED
-          ? "Location permission is blocked. Allow location access for this site in your browser settings, then tap “Use my current location” again."
+          ? "Location permission denied. Go to Settings > Apps > Browser > Permissions > Location and enable it, then try again."
           : error.code === error.POSITION_UNAVAILABLE
-            ? "Your device couldn’t determine its location. Turn on Location Services/GPS and try again, or enter a nearby landmark."
-            : "Finding your location took too long. Check that Location Services/GPS is on and try again, or enter a nearby landmark.";
+            ? "GPS unavailable. Enable Location Services/GPS in your device settings and move to an open area, then try again."
+            : error.code === error.TIMEOUT
+              ? "Location request timed out. Ensure Location Services is on, you're in an open area with clear sky view, then try again."
+              : "Unable to get location. Ensure Location Services is enabled, move to an open area, and try again.";
         setLocationError(message);
         setLocationState("error");
       },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 },
+      { enableHighAccuracy: true, timeout: 60000, maximumAge: 0 },
     );
   };
 
