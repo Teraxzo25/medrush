@@ -7,12 +7,12 @@ type ApiResult = { error?: string; reference?: string; status?: string; checkout
 
 const formatNaira = (amount: number) => `₦${amount.toLocaleString("en-NG")}`;
 
-export default function PagaPaymentCenter({ isSignedIn, isPayoutAdmin, initialReference }: { isSignedIn: boolean; isPayoutAdmin: boolean; initialReference: string }) {
+export default function PagaPaymentCenter({ isSignedIn, isPayoutAdmin, initialReference, initialPaymentStatus }: { isSignedIn: boolean; isPayoutAdmin: boolean; initialReference: string; initialPaymentStatus: string }) {
   const [contribution, setContribution] = useState({ name: "", email: "", amount: "5000" });
   const [payout, setPayout] = useState({ hospital: "", fundRequestId: "", amount: "25000", bankCode: "", accountNumber: "" });
   const [payoutConfirmation, setPayoutConfirmation] = useState<ApiResult | null>(null);
   const [contributionReference, setContributionReference] = useState(initialReference);
-  const [paymentStatus, setPaymentStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState(initialPaymentStatus);
   const [payoutReference, setPayoutReference] = useState("");
   const [payoutStatus, setPayoutStatus] = useState("");
   const [notice, setNotice] = useState("");
@@ -154,6 +154,7 @@ export default function PagaPaymentCenter({ isSignedIn, isPayoutAdmin, initialRe
             <button className="paga-primary" type="submit" disabled={busy}>{busy ? "Starting checkout…" : "Continue to Paga checkout"}<ArrowUpRight size={16} /></button>
           </form>
           {contributionReference && <div className="paga-status-card"><div><strong>Payment reference</strong><span>{contributionReference}</span></div><span className={`paga-status ${paymentStatus}`}>{paymentStatus || "Awaiting payment"}</span><button className="paga-secondary" type="button" onClick={checkStatus} disabled={busy}>Check status</button></div>}
+          {paymentStatus === "successful" && <a className="paga-community-return" href="/">View the community fund and confirmed payment</a>}
           <p className="paga-footnote"><LockKeyhole size={14} /> Your account details are entered only on Paga. Payment status is confirmed from the signed provider callback.</p>
         </section>
 
