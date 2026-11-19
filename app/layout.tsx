@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Medrush | Guest SOS demonstration',
-  description: 'A no-signup emergency request walkthrough for the Medrush ambulance coordination demonstration in Akwa Ibom State, Nigeria.',
+  title: 'Medrush | Emergency Support',
+  description: 'Emergency request coordination for Akwa Ibom State, Nigeria.',
   generator: 'v0.app',
   icons: {
     icon: [

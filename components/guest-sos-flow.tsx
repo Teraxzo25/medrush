@@ -73,7 +73,7 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess }: GuestS
           <span className="guest-brand-mark"><Activity size={21} /></span>
           <span><strong>medrush</strong><small>When every second matters.</small></span>
         </a>
-        <button className="guest-staff-link" type="button" onClick={onStaffAccess}>Open demo workspace <ArrowRight size={15} /></button>
+        <button className="guest-staff-link" type="button" onClick={onStaffAccess}>Staff workspace <ArrowRight size={15} /></button>
       </header>
 
       <div className="guest-content" id="welcome">
@@ -99,10 +99,10 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess }: GuestS
                   <button className="guest-primary" type="button" onClick={() => setStep(1)}>Get emergency help <ArrowRight size={17} /></button>
                   <p className="guest-real-emergency">For a real emergency, call your local emergency number.</p>
                 </div>
-                <aside className="guest-welcome-aside" aria-label="How this demo works">
+                <aside className="guest-welcome-aside" aria-label="How to request assistance">
                   <div className="guest-siren-icon"><Siren size={22} /></div>
                   <strong>A few details. No signup.</strong>
-                  <span>Choose an issue, add a contact number and location, then create a demo SOS.</span>
+                  <span>Choose an issue, add a contact number and location to request assistance.</span>
                   <div className="guest-privacy-note"><ShieldCheck size={16} /><span>No password, profile or health history needed.</span></div>
                 </aside>
               </div>
@@ -159,18 +159,18 @@ export function GuestSOSFlow({ form, onChange, onSubmit, onStaffAccess }: GuestS
                   <span>Or enter a nearby landmark</span>
                 </div>
                 {locationState === "error" && <p className="guest-location-error" role="alert">Location access is unavailable. Enter a nearby road, building or landmark instead.</p>}
-                {form.location && locationState !== "error" && <p className="guest-location-success" aria-live="polite"><MapPin size={14} /> Location added to this demo request.</p>}
+                {form.location && locationState !== "error" && <p className="guest-location-success" aria-live="polite"><MapPin size={14} /> Location added to your request.</p>}
 
                 <div className="guest-submit-area">
                   <button className="guest-back" type="button" onClick={() => setStep(1)}><ArrowLeft size={15} /> Back</button>
-                  <button className="guest-sos-button" type="submit"><Siren size={19} /> Send demo SOS</button>
+                  <button className="guest-sos-button" type="submit"><Siren size={19} /> Send SOS request</button>
                 </div>
                 <div className="guest-demo-disclaimer"><Phone size={15} /><p>This prototype only updates Medrush&apos;s demo views. It does not contact emergency services, drivers or hospitals.</p></div>
               </div>
             )}
           </form>
         </section>
-        <footer className="guest-footer"><span><ShieldCheck size={14} /> No account or password required</span><span>Medrush demonstration environment</span></footer>
+        <footer className="guest-footer"><span><ShieldCheck size={14} /> No account or password required</span></footer>
       </div>
     </main>
   );
@@ -181,10 +181,9 @@ export function DemoSOSConfirmation({ requestId }: { requestId: string }) {
     <section className="guest-sos-confirmation" aria-labelledby="demo-sos-title" role="status" aria-live="polite">
       <div className="guest-confirmation-top">
         <span className="guest-confirmation-icon"><CheckCircle2 size={21} /></span>
-        <div><span className="guest-eyebrow">DEMO REQUEST · {requestId}</span><h2 id="demo-sos-title">Your request is on the demo dashboard</h2></div>
-        <span className="guest-demo-pill">DEMO ONLY</span>
+        <div><span className="guest-eyebrow">REQUEST · {requestId}</span><h2 id="demo-sos-title">Your request has been recorded</h2></div>
       </div>
-      <p>The request is visible in Medrush&apos;s Dispatch Centre and Responder views, with a hospital pre-alert staged in the Hospital view.</p>
+      <p>Your request has been added to the emergency response queue.</p>
       <div className="guest-demo-stages" aria-label="Demo request status">
         <span><CheckCircle2 size={15} /> Dispatch queue</span>
         <span><CheckCircle2 size={15} /> Responder board</span>
