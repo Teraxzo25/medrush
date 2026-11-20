@@ -1,6 +1,14 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { DM_Sans } from 'next/font/google'
+import { DemoWorkspaceProvider } from '@/lib/demo-workspace'
 import './globals.css'
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+})
 
 export const metadata: Metadata = {
   title: 'Medrush | Emergency Support',
@@ -37,8 +45,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
-        {children}
+      <body className={`${dmSans.variable} antialiased`}>
+        <DemoWorkspaceProvider>{children}</DemoWorkspaceProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

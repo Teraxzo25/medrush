@@ -1,4 +1,5 @@
 import MedrushDashboard, { type CommunityContribution } from "@/components/medrush-dashboard";
+import { CitizenHome } from "@/components/public/citizen-home";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { pagaTransactions } from "@/lib/db/schema";
@@ -29,5 +30,15 @@ export default async function Page() {
     communityContributions = [];
   }
 
-  return <MedrushDashboard communityContributions={communityContributions} />;
+  if (process.env.MEDRUSH_UI_V2 === "false") {
+    return <MedrushDashboard communityContributions={communityContributions} />;
+  }
+
+  const confirmedContributions = communityContributions.filter((item) => item.status === "successful");
+  return (
+    <CitizenHome
+      communityFundTotal={confirmedContributions.reduce((total, item) => total + item.amountNaira, 0)}
+      confirmedContributionCount={confirmedContributions.length}
+    />
+  );
 }

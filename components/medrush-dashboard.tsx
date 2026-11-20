@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Activity, Ambulance, ArrowDownRight, ArrowUpRight, Bell, Check, CheckCircle2, ChevronDown, CircleHelp, Clock3, CreditCard, HeartPulse, Hospital, LayoutDashboard, MapPin, Menu, MessageSquareText, MoreHorizontal, Moon, Navigation, Phone, Plus, Radio, Search, Settings, ShieldCheck, Siren, Smartphone, Sun, UserRound, Users, Wallet, Wifi, X, Zap } from "lucide-react";
-import { ambulances, Emergency, FundRequest, hospitals, initialEmergencies, initialFunds, Payment, PaymentStatus, Role } from "@/lib/medrush-data";
+import { ambulances, Emergency, FundRequest, hospitals, initialEmergencies, initialFunds, initialPayments, Payment, PaymentStatus, Role } from "@/lib/medrush-data";
 
 export type CommunityContribution = { reference: string; amountNaira: number; status: string; createdAt: string };
 import { DemoSOSConfirmation, GuestSOSFlow, type GuestEmergencyForm } from "@/components/guest-sos-flow";
@@ -19,10 +19,7 @@ export default function MedrushDashboard({ communityContributions = [] }: { comm
  const [page,setPage] = useState("Overview");
  const [emergencies,setEmergencies] = useState<Emergency[]>(initialEmergencies);
  const [funds,setFunds] = useState<FundRequest[]>(initialFunds);
- const [payments,setPayments] = useState<Payment[]>([
-  {reference:"PAGA-SBX-40921",requestId:"EF-1092",hospital:"University of Uyo Teaching Hospital",amount:45000,status:"Successful",date:"Today, 10:42 AM",person:"Aniekan Akpan"},
-  {reference:"PAGA-SBX-40908",requestId:"EF-1091",hospital:"St. Luke’s Hospital, Anua",amount:18000,status:"Successful",date:"Today, 10:18 AM",person:"Grace Okon"},
- ]);
+ const [payments,setPayments] = useState<Payment[]>(initialPayments);
  const [toast,setToast] = useState("");
  const [activityLog,setActivityLog] = useState([{id:1,message:"Incoming emergency · MR-24081",role:"Dispatch Centre" as Role,page:"Emergency queue",time:"2 min ago"},{id:2,message:"Hospital pre-alert acknowledged",role:"Hospital" as Role,page:"Incoming arrivals",time:"8 min ago"}]);
  const [unreadAlerts,setUnreadAlerts] = useState(2);
